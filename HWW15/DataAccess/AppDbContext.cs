@@ -17,7 +17,8 @@ namespace HWW15.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=DESKTOP-M2BLLND\\SQLEXPRESS;Database=HotelReservationDb;Integrated Security=True;TrustServerCertificate=True;")
+            optionsBuilder.UseSqlServer("Server=DESKTOP-M2BLLND\\SQLEXPRESS;Database=HotelReservationDb;Integrated Security=True;TrustServerCertificate=True;");
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,8 +41,12 @@ namespace HWW15.DataAccess
                 .HasForeignKey<RoomDetail>(r => r.RoomId);
 
                 entity.HasMany(h => h.Reservations).WithOne(r => r.HotelRoom);
-            });       
-          
+            });
+            modelBuilder.Entity<RoomDetail>(entity =>
+            {
+                entity.HasKey(r=>r.RoomId);
+
+            });
         }
     }
 }
