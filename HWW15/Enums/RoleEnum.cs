@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HWW15.Enums
+{
+    
+    public enum RoleEnum
+    {
+        Admin = 0
+       , Receptionist = 1
+       , NormalUser=2
+    }
+}
