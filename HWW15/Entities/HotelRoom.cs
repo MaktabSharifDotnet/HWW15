@@ -13,5 +13,7 @@ namespace HWW15.Entities
         public int Capacity { get; set; }
         public int PricePerNight { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public RoomDetail RoomDetail { get; set; }
     }
 }

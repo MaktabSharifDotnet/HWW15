@@ -12,10 +12,8 @@ namespace HWW15.Entities
         public string Description { get; set; }
 
         public bool HasWifi { get; set; }
-
         public bool HasAirConditioner { get; set; }
 
-
-
+        public HotelRoom HotelRoom { get; set; }
     }
 }
