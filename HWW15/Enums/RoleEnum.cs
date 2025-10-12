@@ -9,8 +9,8 @@ namespace HWW15.Enums
     
     public enum RoleEnum
     {
-        Admin = 0
-       , Receptionist = 1
-       , NormalUser=2
+        Admin = 1
+       , Receptionist = 2
+       , NormalUser=3
     }
 }

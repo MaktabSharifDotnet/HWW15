@@ -1,5 +1,6 @@
 ﻿using HWW15.Entities;
 using HWW15.Enums;
+using HWW15.Infrastructure;
 using HWW15.Repositories;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,16 @@ namespace HWW15.Services
                 Role = role
             };
             _userRepository.AddUser(newUser);
+        }
+        public void LogIn(string username, string password) 
+        {
+            User? user = _userRepository.GetUserByUsername(username);
+            if (user == null || user.Password != password)
+            {
+                throw new Exception("The username or password is incorrect..");
+            }
+           
+            LocalStorage.Login(user);
         }
     }
 }
