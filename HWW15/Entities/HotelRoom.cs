@@ -15,5 +15,6 @@ namespace HWW15.Entities
         public DateTime CreatedAt { get; set; }
 
         public RoomDetail RoomDetail { get; set; }
+        public List<Reservation> Reservations { get; set; } = [];
     }
 }

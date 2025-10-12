@@ -38,6 +38,8 @@ namespace HWW15.DataAccess
                 entity.HasOne(h => h.RoomDetail)
                 .WithOne(r=>r.HotelRoom)
                 .HasForeignKey<RoomDetail>(r => r.RoomId);
+
+                entity.HasMany(h => h.Reservations).WithOne(r => r.HotelRoom);
             });       
           
         }
