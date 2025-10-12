@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HWW15.DataAccess
 {
-    public class AppDbContext :DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<HotelRoom> HotelRooms { get; set; }
         public DbSet<Reservation> Reservation { get; set; }
@@ -25,11 +25,29 @@ namespace HWW15.DataAccess
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(u=>u.Username).HasMaxLength(100).IsRequired();
+                entity.Property(u => u.Username).HasMaxLength(100).IsRequired();
                 entity.HasIndex(u => u.Username).IsUnique();
                 entity.Property(u => u.Password).HasMaxLength(100).IsRequired();
                 entity.Property(u => u.Role).HasConversion<string>();
-                entity.HasMany(u => u.Reservations).WithOne(r =>r.User);
+                entity.HasMany(u => u.Reservations).WithOne(r => r.User);
+                entity.HasData(
+                     new User
+                    {
+                        Id = 1, 
+                        Username = "admin",
+                        Password = "123", 
+                        Role = Enums.RoleEnum.Admin,
+                        CreatedAt = new DateTime(2024, 10, 1)
+                     },
+                    new User
+                    {
+                        Id = 2,
+                        Username = "reception",
+                        Password = "123",
+                        Role = Enums.RoleEnum.Receptionist,
+                        CreatedAt = new DateTime(2024, 10, 1)
+                    }
+                );
             });
             modelBuilder.Entity<HotelRoom>(entity =>
             {
@@ -37,14 +55,33 @@ namespace HWW15.DataAccess
                 entity.HasIndex(h => h.RoomNumber).IsUnique();
 
                 entity.HasOne(h => h.RoomDetail)
-                .WithOne(r=>r.HotelRoom)
+                .WithOne(r => r.HotelRoom)
                 .HasForeignKey<RoomDetail>(r => r.RoomId);
 
                 entity.HasMany(h => h.Reservations).WithOne(r => r.HotelRoom);
+
+                entity.HasData(
+                   new HotelRoom
+                    {
+                        Id = 1, 
+                        RoomNumber = "101",
+                        Capacity = 2,
+                        PricePerNight = 150,
+                        CreatedAt = new DateTime(2024, 10, 1)
+                   },
+                    new HotelRoom
+                    {
+                        Id = 2,
+                        RoomNumber = "102",
+                        Capacity = 4,
+                        PricePerNight = 250,
+                        CreatedAt = new DateTime(2024, 10, 1)
+                    }
+                );
             });
             modelBuilder.Entity<RoomDetail>(entity =>
             {
-                entity.HasKey(r=>r.RoomId);
+                entity.HasKey(r => r.RoomId);
 
             });
         }

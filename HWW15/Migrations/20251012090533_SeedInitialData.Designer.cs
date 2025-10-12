@@ -4,6 +4,7 @@ using HWW15.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HWW15.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251012090533_SeedInitialData")]
+    partial class SeedInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace HWW15.Migrations
                         {
                             Id = 1,
                             Capacity = 2,
-                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2025, 10, 12, 12, 35, 33, 335, DateTimeKind.Local).AddTicks(8603),
                             PricePerNight = 150,
                             RoomNumber = "101"
                         },
@@ -64,7 +67,7 @@ namespace HWW15.Migrations
                         {
                             Id = 2,
                             Capacity = 4,
-                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2025, 10, 12, 12, 35, 33, 335, DateTimeKind.Local).AddTicks(8847),
                             PricePerNight = 250,
                             RoomNumber = "102"
                         });
@@ -161,7 +164,7 @@ namespace HWW15.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2025, 10, 12, 12, 35, 33, 324, DateTimeKind.Local).AddTicks(8140),
                             Password = "123",
                             Role = "Admin",
                             Username = "admin"
@@ -169,7 +172,7 @@ namespace HWW15.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2025, 10, 12, 12, 35, 33, 325, DateTimeKind.Local).AddTicks(9609),
                             Password = "123",
                             Role = "Receptionist",
                             Username = "reception"
