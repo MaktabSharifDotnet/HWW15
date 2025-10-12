@@ -15,5 +15,6 @@ namespace HWW15.Entities
         public string Password { get; set; }
         public RoleEnum Role { get; set; }
         public DateTime CreatedAt { get; set; }
+        public List<Reservation> Reservations { get; set; } = [];
     }
 }

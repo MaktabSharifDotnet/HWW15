@@ -28,6 +28,7 @@ namespace HWW15.DataAccess
                 entity.HasIndex(u => u.Username).IsUnique();
                 entity.Property(u => u.Password).HasMaxLength(100).IsRequired();
                 entity.Property(u => u.Role).HasConversion<string>();
+                entity.HasMany(u => u.Reservations).WithOne(r =>r.User);
             });
             modelBuilder.Entity<HotelRoom>(entity =>
             {
@@ -37,7 +38,8 @@ namespace HWW15.DataAccess
                 entity.HasOne(h => h.RoomDetail)
                 .WithOne(r=>r.HotelRoom)
                 .HasForeignKey<RoomDetail>(r => r.RoomId);
-            });          
+            });       
+          
         }
     }
 }
