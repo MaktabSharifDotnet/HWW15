@@ -113,6 +113,7 @@ while (true)
                 }
                 break;
             case RoleEnum.Receptionist:
+
                 break;
             case RoleEnum.NormalUser:
                 break;
