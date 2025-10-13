@@ -133,12 +133,40 @@ while (true)
                             try 
                             {
                                 roomId=hotelRoomService.GetHotelRoomIdByRoomNumber(roomNumber);
-                                Console.WriteLine("Please enter CheckIn date (e.g. 2026-02-19):");
-                                DateTime checkInDate = DateTime.Parse(Console.ReadLine()!);
-                                Console.WriteLine("Please enter CheckOut date (e.g. 2026-02-19):");
-                                DateTime checkOutDate = DateTime.Parse(Console.ReadLine()!);
-                                reservationService.CreateReservation(LocalStorage.LoginUser.Id, roomId , checkInDate , checkOutDate);
-                                Console.WriteLine("reservation is done");
+                                Console.WriteLine("please enter username(phoneNumber)");
+                                string username = Console.ReadLine()!;
+                                int userId=userService.GetUserIdByUsername(username);
+                                if (userId>0)
+                                {
+                                    Console.WriteLine("Please enter CheckIn date (e.g. 2026-02-19):");
+                                    DateTime checkInDate = DateTime.Parse(Console.ReadLine()!);
+                                    Console.WriteLine("Please enter CheckOut date (e.g. 2026-02-19):");
+                                    DateTime checkOutDate = DateTime.Parse(Console.ReadLine()!);
+                                    reservationService.CreateReservation(userId, roomId, checkInDate, checkOutDate);
+                                    Console.WriteLine("reservation is done");
+                                }
+                                else 
+                                {
+                                    Console.WriteLine("please enter password");
+                                    string password = Console.ReadLine();
+                                    try
+                                    {
+                                        userService.Register(username, password, RoleEnum.NormalUser);
+                                        Console.WriteLine("Register is done");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine(e.Message);
+                                        Console.WriteLine("Registration failed.");
+                                    }
+                                    Console.WriteLine("Please enter CheckIn date (e.g. 2026-02-19):");
+                                    DateTime checkInDate = DateTime.Parse(Console.ReadLine()!);
+                                    Console.WriteLine("Please enter CheckOut date (e.g. 2026-02-19):");
+                                    DateTime checkOutDate = DateTime.Parse(Console.ReadLine()!);
+                                    reservationService.CreateReservation(userId, roomId, checkInDate, checkOutDate);
+                                    Console.WriteLine("reservation is done");
+                                }
+                                
                             }
                             catch (FormatException)
                             {
