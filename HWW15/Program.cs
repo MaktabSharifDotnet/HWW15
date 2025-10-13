@@ -45,8 +45,20 @@ while (true)
                     break;
 
                 case 2:
-
-
+                    Console.WriteLine("please enter Username");
+                    username = Console.ReadLine();
+                    Console.WriteLine("please enter password");
+                    password = Console.ReadLine();
+                    try
+                    {
+                        userService.LogIn(username, password);
+                        Console.WriteLine("login is done");
+                    }
+                    catch (Exception e) 
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine("Login failed.");
+                    }
                     break;
             }
         }
