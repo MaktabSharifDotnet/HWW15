@@ -18,7 +18,7 @@ namespace HWW15.Services
         {
             _hotelRoomRepository = hotelRoomRepository;
         }
-        public void AddRoom(HotelRoomWithRoomDetailDto hotelRoomWithRoom)
+        public void AddRoom(InfoAddRoomDto infoAddRoomDto)
         {
             if (LocalStorage.LoginUser == null)
             {
@@ -28,18 +28,24 @@ namespace HWW15.Services
             {
                 throw new Exception("The logged in user is not an admin.");
             }
-            HotelRoom? hotel= _hotelRoomRepository.GetHotelRoomByRoomNumber(hotelRoomWithRoom.HotelRoom.RoomNumber);
+            HotelRoom? hotel= _hotelRoomRepository.GetHotelRoomByRoomNumber(infoAddRoomDto.RoomNumber);
             if (hotel != null) 
             {
                 throw new Exception("A room with the same room number has already been added.");
             }
+            RoomDetail roomDetail = new RoomDetail
+            {
+                Description = infoAddRoomDto.Description,
+                HasAirConditioner = infoAddRoomDto.HasAirConditionerBool,
+                HasWifi = infoAddRoomDto.HasWifi,
+            };
             HotelRoom hotelRoom = new HotelRoom
             {
-                RoomNumber = hotelRoomWithRoom.HotelRoom. RoomNumber,
-                Capacity = hotelRoomWithRoom.HotelRoom.Capacity,
-                PricePerNight = hotelRoomWithRoom.HotelRoom.PricePerNight,             
+                RoomNumber = infoAddRoomDto. RoomNumber,
+                Capacity = infoAddRoomDto.Capacity,
+                PricePerNight = infoAddRoomDto.PricePernight,             
                 CreatedAt = DateTime.Now,
-                RoomDetail = hotelRoomWithRoom.RoomDetail,
+                RoomDetail = roomDetail,
             };
             _hotelRoomRepository.AddRoom(hotelRoom);
         }

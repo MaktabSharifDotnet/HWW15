@@ -89,10 +89,10 @@ while (true)
                     {
                         case 1:
                             InfoAddRoomDto infoAddRoomDto = GetInfoForAddRoom();
-                            HotelRoomWithRoomDetailDto hotelRoomWithRoom =GetHotelRoomAndRoomDetail(infoAddRoomDto.Description , infoAddRoomDto.HasWifi ,infoAddRoomDto.HasAirConditionerBool , infoAddRoomDto.RoomNumber , infoAddRoomDto.Capacity);
+                            
                             try 
                             {
-                                hotelRoomService.AddRoom(hotelRoomWithRoom);
+                                hotelRoomService.AddRoom(infoAddRoomDto);
                                 Console.WriteLine("add Room is done");
                             }
                             catch (Exception e) 
@@ -177,24 +177,4 @@ InfoAddRoomDto GetInfoForAddRoom()
     return infoAddRoomDto;
 }
 
-HotelRoomWithRoomDetailDto GetHotelRoomAndRoomDetail( string description ,bool hasWifiBool ,bool hasAirConditionerBool , string roomNumber , int capacity) 
-{
-    RoomDetail roomDetail = new RoomDetail
-    {
-        Description = description,
-        HasWifi = hasWifiBool,
-        HasAirConditioner = hasAirConditionerBool,
-    };
-    HotelRoom hotelRoom = new HotelRoom
-    {
-        RoomNumber = roomNumber,
-        Capacity = capacity,
-        RoomDetail = roomDetail
-    };
-    HotelRoomWithRoomDetailDto hotelRoomWithRoomDetailDto = new HotelRoomWithRoomDetailDto
-    {
-        RoomDetail = roomDetail,
-        HotelRoom = hotelRoom,
-    };
-    return hotelRoomWithRoomDetailDto;
-}
+
