@@ -11,9 +11,10 @@ namespace HWW15.Entities
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-      
-        public HotelRoom HotelRoom { get; set; }
+
         public User User { get; set; }
+        public HotelRoom HotelRoom { get; set; }
+        
         public int HotelRoomId { get; set; }
 
         public DateTime CheckInDate { get; set; }

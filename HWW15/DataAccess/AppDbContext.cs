@@ -17,72 +17,69 @@ namespace HWW15.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=DESKTOP-M2BLLND\\SQLEXPRESS;Database=HotelReservationDb;Integrated Security=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-M2BLLND\\SQLEXPRESS;Database=HotelReservationDb_Practice;Integrated Security=True;TrustServerCertificate=True;");
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<User>(user =>
             {
-                entity.Property(u => u.Username).HasMaxLength(100).IsRequired();
-                entity.HasIndex(u => u.Username).IsUnique();
-                entity.Property(u => u.Password).HasMaxLength(100).IsRequired();
-                entity.Property(u => u.Role).HasConversion<string>();
-                entity.HasMany(u => u.Reservations).WithOne(r => r.User);
-                entity.HasData(
-                     new User
-                    {
-                        Id = 1, 
-                        Username = "admin",
-                        Password = "123", 
-                        Role = Enums.RoleEnum.Admin,
-                        CreatedAt = new DateTime(2024, 10, 1)
-                     },
-                    new User
-                    {
-                        Id = 2,
-                        Username = "reception",
-                        Password = "123",
-                        Role = Enums.RoleEnum.Receptionist,
-                        CreatedAt = new DateTime(2024, 10, 1)
-                    }
+                user.Property(u=>u.Username).HasMaxLength(100).IsRequired();
+                user.Property(u=>u.Password).HasMaxLength(100).IsRequired();
+                user.HasIndex(u=>u.Username).IsUnique();
+                user.Property(u => u.Role).HasConversion<string>();
+                user.HasMany(u => u.Reservations).WithOne(r => r.User).HasForeignKey(r=>r.UserId);
+                user.HasData(new User
+                {
+                    Id = 1,
+                    Username = "admin",
+                    Password = "123", 
+                    Role = Enums.RoleEnum.Admin,
+                    CreatedAt = new DateTime(2024, 10, 1)
+
+                },
+                new User 
+                {
+
+                    Id = 2,
+                    Username = "reception",
+                    Password = "123",
+                    Role = Enums.RoleEnum.Receptionist,
+                    CreatedAt = new DateTime(2024, 10, 1)
+                }
                 );
             });
-            modelBuilder.Entity<HotelRoom>(entity =>
+            modelBuilder.Entity<HotelRoom>(room =>
             {
-                entity.Property(h => h.RoomNumber).HasMaxLength(4).IsRequired();
-                entity.HasIndex(h => h.RoomNumber).IsUnique();
 
-                entity.HasOne(h => h.RoomDetail)
-                .WithOne(r => r.HotelRoom)
-                .HasForeignKey<RoomDetail>(r => r.RoomId);
+                room.HasMany(r => r.Reservations).WithOne(reservation => reservation.HotelRoom);
+                room.Property(r=>r.RoomNumber).HasMaxLength(4).IsRequired();
+                room.HasIndex(r=>r.RoomNumber).IsUnique();
+                room.HasOne(r => r.RoomDetail).WithOne(rd => rd.HotelRoom).HasForeignKey<RoomDetail>(rd=>rd.RoomId);
+                room.HasData(new HotelRoom
+                {
+                    Id = 1,
+                    RoomNumber = "101",
+                    Capacity = 2,
+                    PricePerNight = 150,
+                    CreatedAt = new DateTime(2024, 10, 1)
 
-                entity.HasMany(h => h.Reservations).WithOne(r => r.HotelRoom);
+                },
+                new HotelRoom 
+                {
+                    Id = 2,
+                    RoomNumber = "102",
+                    Capacity = 4,
+                    PricePerNight = 250,
+                    CreatedAt = new DateTime(2024, 10, 1)
 
-                entity.HasData(
-                   new HotelRoom
-                    {
-                        Id = 1, 
-                        RoomNumber = "101",
-                        Capacity = 2,
-                        PricePerNight = 150,
-                        CreatedAt = new DateTime(2024, 10, 1)
-                   },
-                    new HotelRoom
-                    {
-                        Id = 2,
-                        RoomNumber = "102",
-                        Capacity = 4,
-                        PricePerNight = 250,
-                        CreatedAt = new DateTime(2024, 10, 1)
-                    }
+                }
                 );
             });
-            modelBuilder.Entity<RoomDetail>(entity =>
+            modelBuilder.Entity<RoomDetail>(rd =>
             {
-                entity.HasKey(r => r.RoomId);
-
+                rd.HasKey(r => r.RoomId);   
             });
         }
     }
