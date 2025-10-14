@@ -1,5 +1,7 @@
 ﻿using HWW15.DataAccess;
+using HWW15.DTOs;
 using HWW15.Entities;
+using HWW15.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +26,7 @@ namespace HWW15.Repositories
            _context.Users.Add(user);
            _context.SaveChanges();
         }
+
+      
     }
 }

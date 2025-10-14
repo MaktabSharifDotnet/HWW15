@@ -1,5 +1,7 @@
 ﻿using HWW15.DataAccess;
+using HWW15.DTOs;
 using HWW15.Entities;
+using HWW15.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,23 @@ namespace HWW15.Repositories
           _context.SaveChanges();
         }
 
+        public List<Reservation> GetActiveReservationsByRoomId(int roomId)
+        {
+            return _context.Reservation
+                .Where(r => r.HotelRoomId == roomId &&
+                            (r.Status == StatusEnum.Pending || r.Status == StatusEnum.Confirmed))
+                .ToList();
+        }
+        public List<InfoReservationNormalUserDto> GetReservationNormalUser(int userId)
+        {
+            return _context.Reservation.Where(r => r.UserId == userId).
+                 Select(reservation => new InfoReservationNormalUserDto
+                 {
+                     RoomNumber = reservation.HotelRoom.RoomNumber,
+                     CheckInDate = reservation.CheckInDate,
+                     CheckOutDate = reservation.CheckOutDate,
 
+                 }).ToList();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HWW15.Entities;
+﻿using HWW15.DTOs;
+using HWW15.Entities;
 using HWW15.Enums;
 using HWW15.Infrastructure;
 using HWW15.Repositories;
@@ -14,9 +15,11 @@ namespace HWW15.Services
     public class UserService
     {
         private readonly UserRepository _userRepository;
-        public UserService(UserRepository userRepository)
+  
+        public UserService(UserRepository userRepository )
         {
             _userRepository = userRepository;
+            
         }
         public void Register(string username , string password , RoleEnum role) 
         {
@@ -53,5 +56,7 @@ namespace HWW15.Services
             }
             return user.Id;
         }
+
+     
     }
 }
