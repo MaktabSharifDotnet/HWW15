@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HWW15.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeedRoomDetails : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,6 +93,33 @@ namespace HWW15.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "HotelRooms",
+                columns: new[] { "Id", "Capacity", "CreatedAt", "PricePerNight", "RoomNumber" },
+                values: new object[,]
+                {
+                    { 1, 2, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 150, "101" },
+                    { 2, 4, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 250, "102" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "Password", "Role", "Username" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "123", "Admin", "admin" },
+                    { 2, new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "123", "Receptionist", "reception" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RoomDetail",
+                columns: new[] { "RoomId", "Description", "HasAirConditioner", "HasWifi" },
+                values: new object[,]
+                {
+                    { 1, "A standard double room.", true, true },
+                    { 2, "A spacious family room.", false, true }
                 });
 
             migrationBuilder.CreateIndex(

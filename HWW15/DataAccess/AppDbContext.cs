@@ -32,12 +32,12 @@ namespace HWW15.DataAccess
                 entity.HasMany(u => u.Reservations).WithOne(r => r.User);
                 entity.HasData(
                      new User
-                    {
-                        Id = 1, 
-                        Username = "admin",
-                        Password = "123", 
-                        Role = Enums.RoleEnum.Admin,
-                        CreatedAt = new DateTime(2024, 10, 1)
+                     {
+                         Id = 1,
+                         Username = "admin",
+                         Password = "123",
+                         Role = Enums.RoleEnum.Admin,
+                         CreatedAt = new DateTime(2024, 10, 1)
                      },
                     new User
                     {
@@ -49,6 +49,8 @@ namespace HWW15.DataAccess
                     }
                 );
             });
+
+           
             modelBuilder.Entity<HotelRoom>(entity =>
             {
                 entity.Property(h => h.RoomNumber).HasMaxLength(4).IsRequired();
@@ -60,30 +62,50 @@ namespace HWW15.DataAccess
 
                 entity.HasMany(h => h.Reservations).WithOne(r => r.HotelRoom);
 
-                entity.HasData(
-                   new HotelRoom
-                    {
-                        Id = 1, 
-                        RoomNumber = "101",
-                        Capacity = 2,
-                        PricePerNight = 150,
-                        CreatedAt = new DateTime(2024, 10, 1)
-                   },
-                    new HotelRoom
-                    {
-                        Id = 2,
-                        RoomNumber = "102",
-                        Capacity = 4,
-                        PricePerNight = 250,
-                        CreatedAt = new DateTime(2024, 10, 1)
-                    }
-                );
+              
             });
+
             modelBuilder.Entity<RoomDetail>(entity =>
             {
                 entity.HasKey(r => r.RoomId);
-
             });
+
+            modelBuilder.Entity<HotelRoom>().HasData(
+                new HotelRoom
+                {
+                    Id = 1,
+                    RoomNumber = "101",
+                    Capacity = 2,
+                    PricePerNight = 150,
+                    CreatedAt = new DateTime(2024, 10, 1)
+                },
+                new HotelRoom
+                {
+                    Id = 2,
+                    RoomNumber = "102",
+                    Capacity = 4,
+                    PricePerNight = 250,
+                    CreatedAt = new DateTime(2024, 10, 1)
+                }
+            );
+
+            modelBuilder.Entity<RoomDetail>().HasData(
+                new RoomDetail
+                {
+                    RoomId = 1,
+                    Description = "A standard double room.",
+                    HasWifi = true,
+                    HasAirConditioner = true
+                },
+                new RoomDetail
+                {
+                    RoomId = 2, 
+                    Description = "A spacious family room.",
+                    HasWifi = true,
+                    HasAirConditioner = false
+                }
+            );
+            
         }
     }
 }

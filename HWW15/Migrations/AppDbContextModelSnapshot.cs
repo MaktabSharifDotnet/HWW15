@@ -123,6 +123,22 @@ namespace HWW15.Migrations
                     b.HasKey("RoomId");
 
                     b.ToTable("RoomDetail");
+
+                    b.HasData(
+                        new
+                        {
+                            RoomId = 1,
+                            Description = "A standard double room.",
+                            HasAirConditioner = true,
+                            HasWifi = true
+                        },
+                        new
+                        {
+                            RoomId = 2,
+                            Description = "A spacious family room.",
+                            HasAirConditioner = false,
+                            HasWifi = true
+                        });
                 });
 
             modelBuilder.Entity("HWW15.Entities.User", b =>

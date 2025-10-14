@@ -174,7 +174,27 @@ while (true)
                 }
                 break;
             case RoleEnum.NormalUser:
-                ShowInfoReservation();
+                Console.WriteLine("Please select an option.");
+                Console.WriteLine("1.ShowInfoReservation , 2.Exit");
+                try 
+                {
+                    int choice = int.Parse(Console.ReadLine()!);
+                    switch (choice)
+                    {
+                        case 1:
+                            ShowInfoReservation();
+                            break;
+                        case 2:
+                            LocalStorage.Logout();
+                            break;
+
+                    }
+                }
+                catch (FormatException) 
+                {
+                    Console.WriteLine("invalid option Please select one of the options provided.1.ShowInfoReservation , 2.Exit\"");
+                }
+                
                 break;
         }
     }

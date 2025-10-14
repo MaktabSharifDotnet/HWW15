@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HWW15.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251012084408_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251014053012_SeedRoomDetails")]
+    partial class SeedRoomDetails
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,24 @@ namespace HWW15.Migrations
                         .IsUnique();
 
                     b.ToTable("HotelRooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Capacity = 2,
+                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 150,
+                            RoomNumber = "101"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Capacity = 4,
+                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 250,
+                            RoomNumber = "102"
+                        });
                 });
 
             modelBuilder.Entity("HWW15.Entities.Reservation", b =>
@@ -108,6 +126,22 @@ namespace HWW15.Migrations
                     b.HasKey("RoomId");
 
                     b.ToTable("RoomDetail");
+
+                    b.HasData(
+                        new
+                        {
+                            RoomId = 1,
+                            Description = "A standard double room.",
+                            HasAirConditioner = true,
+                            HasWifi = true
+                        },
+                        new
+                        {
+                            RoomId = 2,
+                            Description = "A spacious family room.",
+                            HasAirConditioner = false,
+                            HasWifi = true
+                        });
                 });
 
             modelBuilder.Entity("HWW15.Entities.User", b =>
@@ -141,6 +175,24 @@ namespace HWW15.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "123",
+                            Role = "Admin",
+                            Username = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Password = "123",
+                            Role = "Receptionist",
+                            Username = "reception"
+                        });
                 });
 
             modelBuilder.Entity("HWW15.Entities.Reservation", b =>
