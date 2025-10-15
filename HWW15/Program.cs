@@ -170,7 +170,7 @@ while (true)
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("invalid option Please select one of the options provided.1.Add Room 2.Exit");
+                    Console.WriteLine("invalid option Please select one of the options provided. 1.AddReservation , 2.Exit");
                 }
                 break;
             case RoleEnum.NormalUser:

@@ -49,8 +49,6 @@ namespace HWW15.DataAccess
                     }
                 );
             });
-
-           
             modelBuilder.Entity<HotelRoom>(entity =>
             {
                 entity.Property(h => h.RoomNumber).HasMaxLength(4).IsRequired();
@@ -64,12 +62,10 @@ namespace HWW15.DataAccess
 
               
             });
-
             modelBuilder.Entity<RoomDetail>(entity =>
             {
                 entity.HasKey(r => r.RoomId);
             });
-
             modelBuilder.Entity<HotelRoom>().HasData(
                 new HotelRoom
                 {
@@ -88,7 +84,6 @@ namespace HWW15.DataAccess
                     CreatedAt = new DateTime(2024, 10, 1)
                 }
             );
-
             modelBuilder.Entity<RoomDetail>().HasData(
                 new RoomDetail
                 {
@@ -105,6 +100,11 @@ namespace HWW15.DataAccess
                     HasAirConditioner = false
                 }
             );
+
+            modelBuilder.Entity<Reservation>(entity =>
+            {
+                entity.Property(r => r.Status).HasConversion<string>();
+            });
             
         }
     }
