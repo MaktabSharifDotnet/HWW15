@@ -32,7 +32,8 @@ namespace HWW15.Services
             {
                 Username = username ,
                 Password = password ,
-                Role = role
+                Role = role,
+                CreatedAt = DateTime.Now
             };
             _userRepository.AddUser(newUser);
         }

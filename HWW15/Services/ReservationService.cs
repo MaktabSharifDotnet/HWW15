@@ -20,7 +20,7 @@ namespace HWW15.Services
             _reservationRepository = reservationRepository;
             _hotelRoomRepository = hotelRoomRepository;
         }
-        public void CreateReservation(int userId, int hotelRoomId, DateTime checkInDate, DateTime checkOutDate)
+        public void CreateReservation(int hotelRoomId, int userId, DateTime checkInDate, DateTime checkOutDate)
         {
           
             if (LocalStorage.LoginUser == null)
