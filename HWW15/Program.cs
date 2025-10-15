@@ -5,12 +5,15 @@ using HWW15.Enums;
 using HWW15.Infrastructure;
 using HWW15.Repositories;
 using HWW15.Services;
+using System.Data;
 
 AppDbContext appDbContext = new AppDbContext();
 UserRepository userRepository = new UserRepository(appDbContext);
 HotelRoomRepository hotelRoomRepository = new HotelRoomRepository(appDbContext);
+ReservationRepository reservationRepository = new ReservationRepository(appDbContext);
 UserService userService = new UserService(userRepository);
-HotelRoomService hotelRoomService  = new HotelRoomService(hotelRoomRepository);
+HotelRoomService hotelRoomService = new HotelRoomService(hotelRoomRepository);
+ReservationService reservationService = new ReservationService(reservationRepository, hotelRoomRepository);
 
 while (true)
 {
@@ -89,18 +92,18 @@ while (true)
                     {
                         case 1:
                             InfoAddRoomDto infoAddRoomDto = GetInfoForAddRoom();
-                            
-                            try 
+
+                            try
                             {
                                 hotelRoomService.AddRoom(infoAddRoomDto);
                                 Console.WriteLine("add Room is done");
                             }
-                            catch (Exception e) 
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                                 Console.WriteLine("addroom failed");
                             }
-                           
+
                             break;
                         case 2:
                             LocalStorage.Logout();
@@ -113,6 +116,55 @@ while (true)
                 }
                 break;
             case RoleEnum.Receptionist:
+                Console.WriteLine("1.AddReservation , 2.Exit");
+                try
+                {
+                    int choice = int.Parse(Console.ReadLine()!);
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.WriteLine("please enter Checkin");
+                            DateTime checkIn = DateTime.Parse(Console.ReadLine()!);
+                            Console.WriteLine("please enter CheckOut");
+                            DateTime checkOut = DateTime.Parse(Console.ReadLine()!);
+                            Console.WriteLine("please enter roomId");
+                            ShowRoomNumber(checkIn, checkOut);
+                            try
+                            {
+                                int roomId = int.Parse(Console.ReadLine()!);
+                                Console.WriteLine("please enter username");
+                                string username = Console.ReadLine()!;
+                                User? userDb = userService.GetUserByUsername(username);
+                                if (userDb == null)
+                                {
+                                    Console.WriteLine("please enter password");
+                                    string pass = Console.ReadLine()!;
+                                     userService.Register(username, pass, RoleEnum.NormalUser);
+                                     userDb = userService.GetUserByUsername(username);
+                                }                               
+                                reservationService.AddReservation(roomId, userDb.Id, checkIn, checkOut);
+                                Console.WriteLine("reservation is done");
+                                
+                            }
+                            catch (FormatException e)
+                            {
+                                Console.WriteLine("invalid roomId");
+                            }
+                            catch (Exception e) 
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+
+                            break;
+                        case 2:
+                            LocalStorage.Logout();
+                            break;
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("invalid option");
+                }
 
                 break;
             case RoleEnum.NormalUser:
@@ -120,7 +172,7 @@ while (true)
         }
     }
 }
-InfoAddRoomDto GetInfoForAddRoom() 
+InfoAddRoomDto GetInfoForAddRoom()
 {
     Console.WriteLine("please enter roomNumber");
     string roomNumber = Console.ReadLine();
@@ -166,16 +218,25 @@ InfoAddRoomDto GetInfoForAddRoom()
     {
         Console.WriteLine("invalid option Please select one of the options provided. HasAirConditioner ? 1.yes 2.No");
     }
-    InfoAddRoomDto infoAddRoomDto = new InfoAddRoomDto 
+    InfoAddRoomDto infoAddRoomDto = new InfoAddRoomDto
     {
-      RoomNumber = roomNumber,
-      Capacity = capacity,
-      PricePernight = pricePernight,
-      Description = description,
-      HasWifi = hasWifiBool,
-      HasAirConditionerBool = hasAirConditionerBool
+        RoomNumber = roomNumber,
+        Capacity = capacity,
+        PricePernight = pricePernight,
+        Description = description,
+        HasWifi = hasWifiBool,
+        HasAirConditionerBool = hasAirConditionerBool
     };
     return infoAddRoomDto;
 }
-
+void ShowRoomNumber(DateTime checkIn, DateTime checkOut)
+{
+   List<HotelRoom> rooms =hotelRoomService.GetFreeRooms(checkIn , checkOut);
+    foreach (var room in rooms)
+    {
+        Console.WriteLine($"RoomId :{room.Id} , roomNumber{room.RoomNumber} , capacity : {room.Capacity} , " +
+            $"PricePerNight : {room.PricePerNight} , Description : {room.RoomDetail.Description} , " +
+            $"hasWifi : {room.RoomDetail.HasWifi} , HasAirConditioner : {room.RoomDetail.HasAirConditioner}");
+    }
+}
 

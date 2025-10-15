@@ -1,5 +1,6 @@
 ﻿using HWW15.DataAccess;
 using HWW15.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,14 @@ namespace HWW15.Repositories
         public HotelRoom? GetHotelRoomByRoomNumber(string roomNumber) 
         {
           return _context.HotelRooms.FirstOrDefault(h=>h.RoomNumber == roomNumber);
+        }
+
+        public List<HotelRoom> GetFreeRooms(DateTime checkIn, DateTime checkOut)
+        {
+           return _context.HotelRooms
+                .Where(room => !room.Reservations.Any(r => r.CheckInDate < checkOut && r.CheckOutDate > checkIn))
+                .Include(r=>r.RoomDetail)
+                .ToList();
         }
 
     }

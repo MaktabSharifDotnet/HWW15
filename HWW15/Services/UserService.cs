@@ -43,5 +43,11 @@ namespace HWW15.Services
            
             LocalStorage.Login(user);
         }
+
+        public User? GetUserByUsername(string userName) 
+        {
+           return _userRepository.GetUserByUsername(userName);
+        
+        }
     }
 }

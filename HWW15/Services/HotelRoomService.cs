@@ -49,5 +49,9 @@ namespace HWW15.Services
             };
             _hotelRoomRepository.AddRoom(hotelRoom);
         }
+        public List<HotelRoom> GetFreeRooms(DateTime checkIn, DateTime checkOut) 
+        {
+          return  _hotelRoomRepository.GetFreeRooms(checkIn, checkOut);
+        }
     }
 }
