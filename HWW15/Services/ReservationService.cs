@@ -60,10 +60,7 @@ namespace HWW15.Services
 
             _reservationRepository.AddReservation(reservation);
         }
-        public List<InfoRoomDto> GetAllRooms() 
-        {
-          return  _hotelRoomRepository.GetAllRooms();
-        }
+     
         public List<InfoReservationNormalUserDto> GetReservationNormalUser()
         {
             if (LocalStorage.LoginUser == null)

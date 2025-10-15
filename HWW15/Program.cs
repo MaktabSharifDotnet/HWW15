@@ -124,44 +124,40 @@ while (true)
                     int choice = int.Parse(Console.ReadLine()!);
                     switch (choice)
                     {
+                        
                         case 1:
-                            DisplayRooms();
-                            Console.WriteLine("please select hotel RoomNumber ");
-                            string roomNumber = Console.ReadLine()!;
-                            int roomId = 0;
-                            int userId = 0; 
-
+                            Console.WriteLine("please enter Checkin");
+                            DateTime checkIn = DateTime.Parse(Console.ReadLine()!);
+                            Console.WriteLine("please enter CheckOut");
+                            DateTime checkOut = DateTime.Parse(Console.ReadLine()!);
+                            Console.WriteLine("please enter roomId");
+                            ShowFreeRoom(checkIn, checkOut);
                             try
                             {
-                                roomId = hotelRoomService.GetHotelRoomIdByRoomNumber(roomNumber);
-                                Console.WriteLine("please enter username(phoneNumber)");
+                                int roomId = int.Parse(Console.ReadLine()!);
+                                Console.WriteLine("please enter username");
                                 string username = Console.ReadLine()!;
-                                User? existingUser = userRepository.GetUserByUsername(username);
-                                if (existingUser != null)
+                                User? userDb = userService.GetUserByUsername(username);
+                                if (userDb == null)
                                 {
-                                    userId = existingUser.Id;
+                                    Console.WriteLine("please enter password");
+                                    string pass = Console.ReadLine()!;
+                                    userService.Register(username, pass, RoleEnum.NormalUser);
+                                    userDb = userService.GetUserByUsername(username);
                                 }
-                                else
-                                {
-                                    Console.WriteLine("User not found. Please enter a password to register:");
-                                    string password = Console.ReadLine()!;
-                                    userService.Register(username, password, RoleEnum.NormalUser);
-                                    Console.WriteLine("New user registered successfully.");
-                                    existingUser = userRepository.GetUserByUsername(username);
-                                    userId = existingUser!.Id;
-                                }
-                                CreateReservationDto createReservationDto = CompleteReservationProcess();
-                                reservationService.CreateReservation(userId, roomId, createReservationDto.CheckInDate, createReservationDto.CheckOutDate);
-                                Console.WriteLine("Reservation is done successfully!");
+                                reservationService.CreateReservation(roomId, userDb.Id, checkIn, checkOut);
+                                Console.WriteLine("reservation is done");
+
                             }
-                            catch (FormatException)
+                            catch (FormatException e)
                             {
-                                Console.WriteLine("Invalid date format. Please use the correct format (e.g. YYYY-MM-DD).");
+                                Console.WriteLine("invalid roomId");
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine($"An error occurred: {e.Message}");
+                                Console.WriteLine(e.Message);
                             }
+
                             break;
                         case 2:
                             LocalStorage.Logout();
@@ -257,36 +253,25 @@ InfoAddRoomDto GetInfoForAddRoom()
     return infoAddRoomDto;
 }
 
-void DisplayRooms() 
-{
-    List<InfoRoomDto> infoRooms = reservationService.GetAllRooms();
-    foreach (var infoRoom in infoRooms)
-    {
-        Console.WriteLine($"RoomNumber :{infoRoom.RoomNumber} , PricePerNight : {infoRoom.PricePerNight}" +
-            $"Description : {infoRoom.Description} , haswifi : {infoRoom.HasWifi} , HasAirConditioner : {infoRoom.HasAirConditioner}"); 
-    }
-}
 
-CreateReservationDto CompleteReservationProcess() 
-{
-    Console.WriteLine("Please enter CheckIn date (e.g. 2026-02-19):");
-    DateTime checkInDate = DateTime.Parse(Console.ReadLine()!);
-    Console.WriteLine("Please enter CheckOut date (e.g. 2026-02-19):");
-    DateTime checkOutDate = DateTime.Parse(Console.ReadLine()!);
-    CreateReservationDto createReservationDto = new CreateReservationDto
-    {
-        CheckInDate = checkInDate,
-        CheckOutDate = checkOutDate
-    };
-    return createReservationDto;
-}
 
-void ShowInfoReservation() 
+
+void ShowInfoReservation()
 {
     List<InfoReservationNormalUserDto> infoReservations = reservationService.GetReservationNormalUser();
     foreach (var info in infoReservations)
     {
         Console.WriteLine($"RoomNumber : {info.RoomNumber} , CheckIn : {info.CheckInDate} , CheckOut : {info.CheckOutDate}");
+    }
+}
+void ShowFreeRoom(DateTime checkIn, DateTime checkOut)
+{
+    List<HotelRoom> rooms = hotelRoomService.GetFreeRooms(checkIn, checkOut);
+    foreach (var room in rooms)
+    {
+        Console.WriteLine($"RoomId :{room.Id} , roomNumber{room.RoomNumber} , capacity : {room.Capacity} , " +
+            $"PricePerNight : {room.PricePerNight} , Description : {room.RoomDetail.Description} , " +
+            $"hasWifi : {room.RoomDetail.HasWifi} , HasAirConditioner : {room.RoomDetail.HasAirConditioner}");
     }
 }
 

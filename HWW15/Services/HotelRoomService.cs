@@ -49,15 +49,10 @@ namespace HWW15.Services
             };
             _hotelRoomRepository.AddRoom(hotelRoom);
         }
-        public int GetHotelRoomIdByRoomNumber(string roomNumber) 
+     
+        public List<HotelRoom> GetFreeRooms(DateTime checkIn, DateTime checkOut)
         {
-          HotelRoom? hotelRoomDb = _hotelRoomRepository.GetHotelRoomByRoomNumber(roomNumber);
-            if (hotelRoomDb==null)
-            {
-                throw new Exception("There is no room with that number.");
-
-            }
-            return hotelRoomDb.Id;
+            return _hotelRoomRepository.GetFreeRooms(checkIn, checkOut);
         }
     }
 }

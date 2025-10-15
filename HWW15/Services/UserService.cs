@@ -47,16 +47,11 @@ namespace HWW15.Services
             LocalStorage.Login(user);
         }
 
-        public int GetUserIdByUsername(string userName) 
+        public User? GetUserByUsername(string userName)
         {
-           User? user=_userRepository.GetUserByUsername(userName);
-            if (user==null)
-            {
-                throw new Exception("No user with that username exists.");
-            }
-            return user.Id;
+            return _userRepository.GetUserByUsername(userName);
+
         }
 
-     
     }
 }

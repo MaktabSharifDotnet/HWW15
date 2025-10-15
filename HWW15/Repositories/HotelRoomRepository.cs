@@ -1,6 +1,7 @@
 ﻿using HWW15.DataAccess;
 using HWW15.DTOs;
 using HWW15.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,17 +26,13 @@ namespace HWW15.Repositories
         {
           return _context.HotelRooms.FirstOrDefault(h=>h.RoomNumber == roomNumber);
         }
-        public List<InfoRoomDto> GetAllRooms() 
+      
+        public List<HotelRoom> GetFreeRooms(DateTime checkIn, DateTime checkOut)
         {
-          return  _context.HotelRooms.Select(h => new InfoRoomDto
-            {
-                RoomNumber = h.RoomNumber,
-                PricePerNight = h.PricePerNight,
-                Description = h.RoomDetail.Description,
-                HasAirConditioner = h.RoomDetail.HasAirConditioner,
-                HasWifi = h.RoomDetail.HasWifi,
-            } 
-            ).ToList();
+            return _context.HotelRooms
+                 .Where(room => !room.Reservations.Any(r => r.CheckInDate < checkOut && r.CheckOutDate > checkIn))
+                 .Include(r => r.RoomDetail)
+                 .ToList();
         }
     }
 }
