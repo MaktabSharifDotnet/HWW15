@@ -145,7 +145,8 @@ while (true)
                                     userService.Register(username, pass, RoleEnum.NormalUser);
                                     userDb = userService.GetUserByUsername(username);
                                 }
-                                reservationService.CreateReservation(userDb.Id, roomId, checkIn, checkOut);
+                                reservationService.CreateReservation(roomId, userDb.Id, checkIn, checkOut);
+
                                 Console.WriteLine("reservation is done");
 
                             }
