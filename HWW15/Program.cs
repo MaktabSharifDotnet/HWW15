@@ -15,7 +15,7 @@ HotelRoomRepository hotelRoomRepository = new HotelRoomRepository(appDbContext);
 ReservationRepository reservationRepository = new ReservationRepository(appDbContext);
 UserService userService = new UserService(userRepository);
 HotelRoomService hotelRoomService = new HotelRoomService(hotelRoomRepository);
-ReservationService reservationService = new ReservationService(reservationRepository,hotelRoomRepository);
+ReservationService reservationService = new ReservationService(reservationRepository, hotelRoomRepository);
 
 while (true)
 {
@@ -118,13 +118,13 @@ while (true)
                 break;
             case RoleEnum.Receptionist:
                 Console.WriteLine("Please select an option.");
-                Console.WriteLine("1.AddReservation , 2.Exit");
+                Console.WriteLine("1.Add Reservation, 2.Confirm Reservation, 3.Cancel Reservation, 4.Exit");
                 try
                 {
                     int choice = int.Parse(Console.ReadLine()!);
                     switch (choice)
                     {
-                        
+
                         case 1:
                             Console.WriteLine("please enter Checkin");
                             DateTime checkIn = DateTime.Parse(Console.ReadLine()!);
@@ -160,20 +160,56 @@ while (true)
                             }
 
                             break;
-                        case 2:
+                        case 2: 
+                            ShowAllReservations();
+                            try
+                            {
+                                Console.WriteLine("Enter reservation ID to confirm:");
+                                int reservationIdToConfirm = int.Parse(Console.ReadLine()!);
+                                reservationService.UpdateReservationStatus(reservationIdToConfirm, StatusEnum.Confirmed);
+                                Console.WriteLine("Reservation confirmed successfully.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Invalid reservation ID.");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            break;
+                        case 3: 
+                            ShowAllReservations();
+                            try
+                            {
+                                Console.WriteLine("Enter reservation ID to cancel:");
+                                int reservationIdToCancel = int.Parse(Console.ReadLine()!);
+                                reservationService.UpdateReservationStatus(reservationIdToCancel, StatusEnum.Canceled);
+                                Console.WriteLine("Reservation canceled successfully.");
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Invalid reservation ID.");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            break;
+                        case 4:
                             LocalStorage.Logout();
                             break;
                     }
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("invalid option Please select one of the options provided. 1.AddReservation , 2.Exit");
+                    Console.WriteLine("invalid option Please select one of the options provided. 1.Add Reservation, 2.Confirm Reservation, 3.Cancel Reservation, 4.Exit");
                 }
                 break;
             case RoleEnum.NormalUser:
                 Console.WriteLine("Please select an option.");
                 Console.WriteLine("1.ShowInfoReservation , 2.Exit");
-                try 
+                try
                 {
                     int choice = int.Parse(Console.ReadLine()!);
                     switch (choice)
@@ -187,11 +223,11 @@ while (true)
 
                     }
                 }
-                catch (FormatException) 
+                catch (FormatException)
                 {
                     Console.WriteLine("invalid option Please select one of the options provided.1.ShowInfoReservation , 2.Exit\"");
                 }
-                
+
                 break;
         }
     }
@@ -276,4 +312,26 @@ void ShowFreeRoom(DateTime checkIn, DateTime checkOut)
     }
 }
 
+void ShowAllReservations()
+{
+    try
+    {
+        var reservations = reservationService.GetAllReservations();
+        if (reservations.Count == 0)
+        {
+            Console.WriteLine("No reservations found.");
+            return;
+        }
 
+        Console.WriteLine("--- All Reservations ---");
+        foreach (var res in reservations)
+        {
+            Console.WriteLine($"ID: {res.Id}, Room: {res.HotelRoom.RoomNumber}, User: {res.User.Username}, Check-in: {res.CheckInDate.ToShortDateString()}, Check-out: {res.CheckOutDate.ToShortDateString()}, Status: {res.Status}");
+        }
+        Console.WriteLine("------------------------");
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
+}

@@ -2,6 +2,7 @@
 using HWW15.DTOs;
 using HWW15.Entities;
 using HWW15.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,10 @@ namespace HWW15.Repositories
         {
             _context = context;
         }
-        public void AddReservation(Reservation reservation) 
+        public void AddReservation(Reservation reservation)
         {
-          _context.Reservation.Add(reservation);
-          _context.SaveChanges();
+            _context.Reservation.Add(reservation);
+            _context.SaveChanges();
         }
 
         public List<Reservation> GetActiveReservationsByRoomId(int roomId)
@@ -40,6 +41,25 @@ namespace HWW15.Repositories
                      CheckOutDate = reservation.CheckOutDate,
 
                  }).ToList();
+        }
+
+        public Reservation? GetReservationById(int reservationId)
+        {
+            return _context.Reservation.FirstOrDefault(r => r.Id == reservationId);
+        }
+
+        public void UpdateReservation(Reservation reservation)
+        {
+            _context.Reservation.Update(reservation);
+            _context.SaveChanges();
+        }
+
+        public List<Reservation> GetAllReservations()
+        {
+            return _context.Reservation
+                .Include(r => r.HotelRoom)
+                .Include(r => r.User)
+                .ToList();
         }
     }
 }
